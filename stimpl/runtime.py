@@ -174,12 +174,12 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
 
         case Divide(left=left, right=right):
             """ TODO: Implement. """
+            case Divide(left=left, right=right):
             left_result, left_type, new_state = evaluate(left, state)
             right_result, right_type, new_state = evaluate(right, new_state)
 
             if left_type != right_type:
-                raise InterpTypeError(f"""Mismatched types for Divide:
-            Cannot divide {left_type} by {right_type}""")
+                raise InterpTypeError(f"Mismatched types for Divide: Cannot divide {left_type} by {right_type}")
 
             match left_type:
                 case Integer() | FloatingPoint():
@@ -187,7 +187,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
                         raise InterpRuntimeError("Division by zero")
                     result = left_result / right_result
                 case _:
-                    raise InterpTypeError(f"""Cannot divide {left_type}s""")
+                    raise InterpTypeError(f"Cannot divide {left_type}s")
 
             return (result, left_type, new_state)
             
@@ -198,14 +198,12 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
             right_value, right_type, new_state = evaluate(right, new_state)
 
             if left_type != right_type:
-                raise InterpTypeError(f"""Mismatched types for And:
-            Cannot evaluate {left_type} and {right_type}""")
+                raise InterpTypeError(f"Mismatched types for And: Cannot evaluate {left_type} and {right_type}")
             match left_type:
                 case Boolean():
                     result = left_value and right_value
                 case _:
-                    raise InterpTypeError(
-                        "Cannot perform logical and on non-boolean operands.")
+                    raise InterpTypeError("Cannot perform logical and on non-boolean operands.")
 
             return (result, left_type, new_state)
 
@@ -215,8 +213,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
             right_value, right_type, new_state = evaluate(right, new_state)
 
             if left_type != right_type:
-                raise InterpTypeError(f"""Mismatched types for Or:
-            Cannot evaluate {left_type} or {right_type}""")
+                raise InterpTypeError(f"Mismatched types for Or: Cannot evaluate {left_type} or {right_type}")
             match left_type:
                 case Boolean():
                     result = left_value or right_value
@@ -242,17 +239,23 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
 
         case If(condition=condition, true=true, false=false):
             """ TODO: Implement. """
+            condition_value, condition_type, new_state = evaluate(condition, state)
+
+            if condition_type != Boolean():
+                raise InterpTypeError("Condition in If must be a Boolean")
+
+            if condition_value:
+                return evaluate(true, new_state)
+            else:
+                return evaluate(false, new_state)
             pass
 
         case Lt(left=left, right=right):
             left_value, left_type, new_state = evaluate(left, state)
             right_value, right_type, new_state = evaluate(right, new_state)
 
-            result = None
-
             if left_type != right_type:
-                raise InterpTypeError(f"""Mismatched types for Lt:
-            Cannot compare {left_type} and {right_type}""")
+                raise InterpTypeError(f"Mismatched types for Lt: Cannot compare {left_type} and {right_type}")
 
             match left_type:
                 case Integer() | Boolean() | String() | FloatingPoint():
@@ -260,21 +263,18 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
                 case Unit():
                     result = False
                 case _:
-                    raise InterpTypeError(
-                        f"Cannot perform < on {left_type} type.")
+                    raise InterpTypeError(f"Cannot perform < on {left_type} type.")
 
             return (result, Boolean(), new_state)
+            pass
 
         case Lte(left=left, right=right):
             """ TODO: Implement. """
             left_value, left_type, new_state = evaluate(left, state)
             right_value, right_type, new_state = evaluate(right, new_state)
 
-            result = None
-
             if left_type != right_type:
-                raise InterpTypeError(f"""Mismatched types for Lte:
-            Cannot compare {left_type} and {right_type}""")
+                raise InterpTypeError(f"Mismatched types for Lte: Cannot compare {left_type} and {right_type}")
 
             match left_type:
                 case Integer() | Boolean() | String() | FloatingPoint():
@@ -282,7 +282,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
                 case Unit():
                     result = True
                 case _:
-                    raise InterpTypeError("Cannot perform <= on {left_type} type.")
+                    raise InterpTypeError(f"Cannot perform <= on {left_type} type.")
 
             return (result, Boolean(), new_state)
             pass
