@@ -94,7 +94,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
 
             return (result, result_type, current_state)
             
-            pass
+            
 
         case Variable(variable_name=variable_name):
             value = state.get_value(variable_name)
@@ -151,7 +151,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
                     raise InterpTypeError(f"""Cannot subtract {left_type}s""")
 
             return (result, left_type, new_state)
-            pass
+            
 
         case Multiply(left=left, right=right):
             """ TODO: Implement. """
@@ -169,7 +169,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
                     raise InterpTypeError(f"""Cannot multiply {left_type}s""")
 
             return (result, left_type, new_state)
-            pass
+            
 
         case Divide(left=left, right=right):
             """ TODO: Implement. """
@@ -195,7 +195,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
             return (result, left_type, new_state)
 
             
-            pass
+            
 
         case And(left=left, right=right):
             left_value, left_type, new_state = evaluate(left, state)
@@ -225,7 +225,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
                     raise InterpTypeError("Cannot perform logical or on non-boolean operands.")
 
             return (result, left_type, new_state)
-            pass
+            
 
         case Not(expr=expr):
             """ TODO: Implement. """
@@ -239,7 +239,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
 
             return (result, expr_type, new_state)
 
-            pass
+            
 
         case If(condition=condition, true=true, false=false):
             """ TODO: Implement. """
@@ -252,7 +252,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
                 return evaluate(true, new_state)
             else:
                 return evaluate(false, new_state)
-            pass
+            
 
         case Lt(left=left, right=right):
             left_value, left_type, new_state = evaluate(left, state)
@@ -270,7 +270,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
                     raise InterpTypeError(f"Cannot perform < on {left_type} type.")
 
             return (result, Boolean(), new_state)
-            pass
+            
 
         case Lte(left=left, right=right):
             """ TODO: Implement. """
@@ -289,7 +289,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
                     raise InterpTypeError(f"Cannot perform <= on {left_type} type.")
 
             return (result, Boolean(), new_state)
-            pass
+            
 
         case Gt(left=left, right=right):
             """ TODO: Implement. """
@@ -309,7 +309,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
 
             return (result, Boolean(), new_state)
 
-            pass
+            
 
         case Gte(left=left, right=right):
             """ TODO: Implement. """
@@ -328,7 +328,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
                     raise InterpTypeError(f"Cannot perform >= on {left_type} type.")
 
             return (result, Boolean(), new_state)
-            pass
+            
 
         case Eq(left=left, right=right):
             """ TODO: Implement. """
@@ -346,7 +346,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
                     raise InterpTypeError(f"Cannot perform == on {left_type} type.")
 
             return (result, Boolean(), new_state)
-            pass
+            
 
         case Ne(left=left, right=right):
             """ TODO: Implement. """
@@ -363,7 +363,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
                     raise InterpTypeError(f"Cannot perform != on {left_type} type.")
 
             return (result, Boolean(), new_state)
-            pass
+            
             
 
         case While(condition=condition, body=body):
@@ -383,7 +383,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
 
         case _:
             raise InterpSyntaxError("Unhandled!")
-    pass
+    
 
 
 def run_stimpl(program, debug=False):
