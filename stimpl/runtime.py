@@ -173,7 +173,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
             pass
 
         case Divide(left=left, right=right):
-        """ TODO: Implement. """
+            """ TODO: Implement. """
     
             left_result, left_type, new_state = evaluate(left, state)
             right_result, right_type, new_state = evaluate(right, new_state)
