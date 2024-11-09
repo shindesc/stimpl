@@ -84,7 +84,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
             return (printable_value, printable_type, new_state)
 
         case Sequence(exprs=exprs) | Program(exprs=exprs):
-            #""" TODO: Implement. """
+            """ TODO: Implement. """
             current_state = state
             result = None
             result_type = Unit()
@@ -93,30 +93,29 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
                 result, result_type, current_state = evaluate(expr, current_state)
 
             return (result, result_type, current_state)
+            
             pass
 
         case Variable(variable_name=variable_name):
             value = state.get_value(variable_name)
-            if value == None:
-                raise InterpSyntaxError(
-                    f"Cannot read from {variable_name} before assignment.")
+            if value is None:
+                raise InterpSyntaxError(f"Cannot read from {variable_name} before assignment.")
             variable_value, variable_type = value
             return (variable_value, variable_type, state)
+            
+
 
         case Assign(variable=variable, value=value):
 
             value_result, value_type, new_state = evaluate(value, state)
-
             variable_from_state = new_state.get_value(variable.variable_name)
-            _, variable_type = variable_from_state if variable_from_state else (
-                None, None)
+            _, variable_type = variable_from_state if variable_from_state else (None, None)
 
-            if value_type != variable_type and variable_type != None:
+            if value_type != variable_type and variable_type is not None:
                 raise InterpTypeError(f"""Mismatched types for Assignment:
             Cannot assign {value_type} to {variable_type}""")
 
-            new_state = new_state.set_value(
-                variable.variable_name, value_result, value_type)
+            new_state = new_state.set_value(variable.variable_name, value_result, value_type)
             return (value_result, value_type, new_state)
 
         case Add(left=left, right=right):
