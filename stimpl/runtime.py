@@ -24,12 +24,16 @@ class State(object):
 
     def get_value(self, variable_name) -> Any:
         """ TODO: Implement. """
+        
+
         current_state = self
-        while current_state:
+        while current_state and hasattr(current_state, 'variable_name'):
             if current_state.variable_name == variable_name:
                 return current_state.value
             current_state = current_state.next_state
         return None
+
+    
 
     def __repr__(self) -> str:
         return f"{self.variable_name}: {self.value}, " + repr(self.next_state)
