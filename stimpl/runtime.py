@@ -144,17 +144,16 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
             """ TODO: Implement. """
             left_result, left_type, new_state = evaluate(left, state)
             right_result, right_type, new_state = evaluate(right, new_state)
-
+            
             if left_type != right_type:
-                raise InterpTypeError(f"""Mismatched types for Subtract:
-            Cannot subtract {left_type} from {right_type}""")
-
+                raise InterpTypeError(f"Mismatched types for Subtract: Cannot subtract {left_type} from {right_type}")
+            
             match left_type:
                 case Integer() | FloatingPoint():
                     result = left_result - right_result
                 case _:
-                    raise InterpTypeError(f"""Cannot subtract {left_type}s""")
-
+                    raise InterpTypeError(f"Cannot subtract {left_type}s")
+            
             return (result, left_type, new_state)
             
 
@@ -162,17 +161,16 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
             """ TODO: Implement. """
             left_result, left_type, new_state = evaluate(left, state)
             right_result, right_type, new_state = evaluate(right, new_state)
-
+            
             if left_type != right_type:
-                raise InterpTypeError(f"""Mismatched types for Multiply:
-            Cannot multiply {left_type} with {right_type}""")
-
+                raise InterpTypeError(f"Mismatched types for Multiply: Cannot multiply {left_type} with {right_type}")
+            
             match left_type:
                 case Integer() | FloatingPoint():
                     result = left_result * right_result
                 case _:
-                    raise InterpTypeError(f"""Cannot multiply {left_type}s""")
-
+                    raise InterpTypeError(f"Cannot multiply {left_type}s")
+            
             return (result, left_type, new_state)
             
 
@@ -181,24 +179,19 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
     
             left_result, left_type, new_state = evaluate(left, state)
             right_result, right_type, new_state = evaluate(right, new_state)
-        
+            
             if left_type != right_type:
                 raise InterpTypeError(f"Mismatched types for Divide: Cannot divide {left_type} by {right_type}")
-        
+            
             match left_type:
-                case Integer():
+                case Integer() | FloatingPoint():
                     if right_result == 0:
-                        raise InterpMathError("Division by zero")
-                    result = left_result / right_result
-                case FloatingPoint():
-                    if right_result == 0.0:
-                        raise InterpMathError("Division by zero")
-                    result = left_result / right_result
+                        raise InterpRuntimeError("Division by zero error")
+                    result = left_result // right_result if left_type == Integer() else left_result / right_result
                 case _:
                     raise InterpTypeError(f"Cannot divide {left_type}s")
-        
+            
             return (result, left_type, new_state)
-
             
             
 
